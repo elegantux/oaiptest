@@ -4,9 +4,7 @@ class oaiptestBackendActions extends waActions
 {
 
   public function oaiptestApiTestAction() {
-    $API_KEY = waRequest::post('api_key');
-
-    $openai = new oaiptestOpenAIProvider($API_KEY);
+    $openai = new oaiptestOpenAIProvider('');
 
     try {
       $openai->getModels();
