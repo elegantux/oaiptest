@@ -1,0 +1,43 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>{$wa->appName()} - {$wa->accountName()}</title>
+  {$wa->css()}
+
+  {wa_js}
+    {$wa_url}wa-content/js/jquery/jquery-1.11.1.min.js
+    {$wa_url}wa-content/js/jquery-wa/wa.js
+  {/wa_js}
+
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css"
+  />
+  <style>
+    #oaiptest-app {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f4f4f4;
+    }
+    #oaiptest-app h1 {
+        margin-top: 200px;
+    }
+  </style>
+</head>
+<body>
+  <div id="wa">
+    {$wa->header()}
+    {oaiptestViewHelper::getSettingsScript()}
+
+    <div id="oaiptest-app">
+      <h1>Жду ответа...</h1>
+    </div>
+
+    <script src="{$wa_app_static_url}js/app.js?v={$wa->version()}"></script>
+  </div>
+</body>
+</html>
