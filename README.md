@@ -2,6 +2,17 @@
 
 ## ChatGPT Proxy
 
+<details><summary>Rest API Call</summary>
+<p>
+
+```
+Path: /
+Method: POST
+```
+
+</p>
+</details>
+
 <details><summary>Empty node</summary>
 <p>
 
@@ -259,7 +270,29 @@
 </p>
 </details>
 
+<details><summary>Return</summary>
+<p>
+
+```
+Status code: OK(200)
+Value: API Call > Data
+```
+
+</p>
+</details>
+
 ## Pixabay Proxy
+
+<details><summary>Rest API CAll</summary>
+<p>
+
+```
+Path: /
+Method: GET
+```
+
+</p>
+</details>
 
 <details><summary>Empty node</summary>
 <p>
@@ -534,6 +567,17 @@
     }
   }
 ]
+```
+
+</p>
+</details>
+
+<details><summary>Return</summary>
+<p>
+
+```
+Status code: OK(200)
+Value: API Call > Data
 ```
 
 </p>
