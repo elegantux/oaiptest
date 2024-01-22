@@ -77,52 +77,114 @@ Method: POST
 ```JSON
 [
   {
-    "id": "5fd0beef-8d06-437f-aefb-91c86780ba84",
-    "dependencies": {
-      "node-fetch": "3.3.2"
+    "id": "6aaace19-3850-48f9-9c6a-b0fad4e5794f",
+    "script": "import fetch from \"node-fetch\";\nexport default async function apiCall({\n    url,\n    method,\n    contentType,\n    authorization,\n    body,\n    shouldAwait,\n    queryParams\n}, {\n    logging\n}) {\n    const headers = {\n        \"Content-Type\": contentType\n    };\n    if (authorization) headers[\"Authorization\"] = authorization;\n\n    let queryParamsString = '';\n    if (queryParams) {\n        queryParamsString = '?' + new URLSearchParams(queryParams).toString();\n    }\n\n    const fetchPromise = fetch(url + queryParamsString, {\n        method,\n        headers,\n        body: JSON.stringify(body),\n    });\n\n    if (!shouldAwait) {\n        return {\n            data: null\n        };\n    }\n\n    const response = await fetchPromise;\n    const data = await response.json();\n\n    logging.log('OpenAI Response:', data.error);\n\n    if (data.error) {\n      throw new Error(data.error.message);\n    }\n\n    return {\n        status: response.status,\n        data\n    };\n}",
+    "meta": {
+      "description": "Make an API call using fetch with provided url, method, contentType, authorization, and body",
+      "icon": {
+        "type": "SVG",
+        "svg": "<path d=\"m14 12l-2 2l-2-2l2-2l2 2zm-2-6l2.12 2.12l2.5-2.5L12 1L7.38 5.62l2.5 2.5L12 6zm-6 6l2.12-2.12l-2.5-2.5L1 12l4.62 4.62l2.5-2.5L6 12zm12 0l-2.12 2.12l2.5 2.5L23 12l-4.62-4.62l-2.5 2.5L18 12zm-6 6l-2.12-2.12l-2.5 2.5L12 23l4.62-4.62l-2.5-2.5L12 18z\"></path>"
+      },
+      "name": "API Call",
+      "id": "api-call"
     },
-    "description": "Make an API call using fetch with provided url, method, contentType, authorization, and body",
-    "version": "1.0.2",
-    "src": "https://storage.googleapis.com/buildship-app-us-central1/builtNodes/api-call/1.0.2.cjs",
-    "integrity": "aa3c32f14ef397fda79ac3fbb7feb1bd7f10108978ab4d2a7e7ad44d195164ec",
-    "script": "import fetch from \"node-fetch\";\nexport default async function apiCall({\n    url,\n    method,\n    contentType,\n    authorization,\n    body,\n    shouldAwait,\n    queryParams\n}, {\n    logging\n}) {\n    const headers = {\n        \"Content-Type\": contentType\n    };\n    if (authorization) headers[\"Authorization\"] = authorization;\n\n    let queryParamsString = '';\n    if (queryParams) {\n        queryParamsString = '?' + new URLSearchParams(queryParams).toString();\n    }\n\n    const fetchPromise = fetch(url + queryParamsString, {\n        method,\n        headers,\n        body: JSON.stringify(body),\n    });\n\n    if (!shouldAwait) {\n        return {\n            data: null\n        };\n    }\n\n    const response = await fetchPromise;\n    const data = await response.json();\n    return {\n        status: response.status,\n        data\n    };\n}",
     "output": {
+      "type": "object",
       "buildship": {},
       "properties": {
+        "status": {
+          "type": "number",
+          "description": "The HTTP status of the API response",
+          "title": "Status",
+          "buildship": {}
+        },
         "data": {
           "description": "The data object from the API response",
           "buildship": {},
-          "title": "Data",
-          "type": "object"
-        },
-        "status": {
-          "description": "The HTTP status of the API response",
-          "buildship": {},
-          "type": "number",
-          "title": "Status"
+          "type": "object",
+          "title": "Data"
         }
-      },
-      "type": "object"
+      }
     },
+    "version": "1.0.2",
     "inputs": {
+      "required": [
+        "url",
+        "shouldAwait",
+        "method"
+      ],
+      "type": "object",
       "properties": {
+        "url": {
+          "buildship": {
+            "index": 1
+          },
+          "title": "URL",
+          "description": "The URL of the API endpoint",
+          "type": "string"
+        },
+        "contentType": {
+          "description": "The content type of the API call",
+          "buildship": {
+            "sensitive": false,
+            "index": 4,
+            "options": [
+              {
+                "label": "application/json",
+                "value": "application/json"
+              },
+              {
+                "value": "application/x-www-form-urlencoded",
+                "label": "application/x-www-form-urlencoded"
+              },
+              {
+                "label": "multipart/form-data",
+                "value": "multipart/form-data"
+              },
+              {
+                "label": "text/plain",
+                "value": "text/plain"
+              }
+            ]
+          },
+          "default": "",
+          "pattern": "",
+          "enum": [
+            "application/json",
+            "application/x-www-form-urlencoded",
+            "multipart/form-data",
+            "text/plain"
+          ],
+          "type": "string",
+          "title": "Content Type"
+        },
         "body": {
+          "type": "object",
+          "description": "The body to send with the API call",
           "buildship": {
             "index": 3
           },
-          "description": "The body to send with the API call",
-          "type": "object",
           "title": "Body"
         },
         "method": {
           "default": "",
+          "type": "string",
+          "title": "HTTP Method",
+          "enum": [
+            "GET",
+            "POST",
+            "PUT",
+            "DELETE",
+            "PATCH"
+          ],
           "pattern": "",
           "buildship": {
             "sensitive": false,
+            "index": 0,
             "options": [
               {
-                "value": "GET",
-                "label": "GET"
+                "label": "GET",
+                "value": "GET"
               },
               {
                 "value": "POST",
@@ -133,134 +195,73 @@ Method: POST
                 "label": "PUT"
               },
               {
-                "label": "DELETE",
-                "value": "DELETE"
+                "value": "DELETE",
+                "label": "DELETE"
               },
               {
                 "label": "PATCH",
                 "value": "PATCH"
               }
-            ],
-            "index": 0
-          },
-          "description": "The HTTP method to use for the API call",
-          "type": "string",
-          "enum": [
-            "GET",
-            "POST",
-            "PUT",
-            "DELETE",
-            "PATCH"
-          ],
-          "title": "HTTP Method"
-        },
-        "contentType": {
-          "type": "string",
-          "title": "Content Type",
-          "description": "The content type of the API call",
-          "default": "",
-          "buildship": {
-            "sensitive": false,
-            "index": 4,
-            "options": [
-              {
-                "value": "application/json",
-                "label": "application/json"
-              },
-              {
-                "label": "application/x-www-form-urlencoded",
-                "value": "application/x-www-form-urlencoded"
-              },
-              {
-                "value": "multipart/form-data",
-                "label": "multipart/form-data"
-              },
-              {
-                "value": "text/plain",
-                "label": "text/plain"
-              }
             ]
           },
-          "pattern": "",
-          "enum": [
-            "application/json",
-            "application/x-www-form-urlencoded",
-            "multipart/form-data",
-            "text/plain"
-          ]
-        },
-        "url": {
-          "description": "The URL of the API endpoint",
-          "type": "string",
-          "buildship": {
-            "index": 1
-          },
-          "title": "URL"
-        },
-        "authorization": {
-          "type": "string",
-          "description": "The authorization header for the API call, if required (e.g., Bearer or Basic token)",
-          "pattern": "",
-          "buildship": {
-            "index": 2,
-            "sensitive": false
-          },
-          "title": "Authorization"
+          "description": "The HTTP method to use for the API call"
         },
         "shouldAwait": {
-          "description": "Whether to wait for the request to complete or not",
           "buildship": {
             "sensitive": false,
             "index": 5
           },
           "type": "boolean",
-          "title": "Await?",
-          "pattern": ""
+          "pattern": "",
+          "description": "Whether to wait for the request to complete or not",
+          "title": "Await?"
+        },
+        "authorization": {
+          "title": "Authorization",
+          "description": "The authorization header for the API call, if required (e.g., Bearer or Basic token)",
+          "pattern": "",
+          "buildship": {
+            "sensitive": false,
+            "index": 2
+          },
+          "type": "string"
         }
-      },
-      "required": [
-        "url",
-        "shouldAwait",
-        "method"
-      ],
-      "type": "object"
+      }
     },
     "type": "script",
+    "integrity": "aa3c32f14ef397fda79ac3fbb7feb1bd7f10108978ab4d2a7e7ad44d195164ec",
+    "src": "https://storage.googleapis.com/buildship-app-us-central1/builtNodes/api-call/1.0.2.cjs",
+    "description": "Make an API call using fetch with provided url, method, contentType, authorization, and body",
+    "name": "API Call",
     "onFail": null,
-    "meta": {
-      "icon": {
-        "svg": "<path d=\"m14 12l-2 2l-2-2l2-2l2 2zm-2-6l2.12 2.12l2.5-2.5L12 1L7.38 5.62l2.5 2.5L12 6zm-6 6l2.12-2.12l-2.5-2.5L1 12l4.62 4.62l2.5-2.5L6 12zm12 0l-2.12 2.12l2.5 2.5L23 12l-4.62-4.62l-2.5 2.5L18 12zm-6 6l-2.12-2.12l-2.5 2.5L12 23l4.62-4.62l-2.5-2.5L12 18z\"></path>",
-        "type": "SVG"
-      },
-      "id": "api-call",
-      "description": "Make an API call using fetch with provided url, method, contentType, authorization, and body",
-      "name": "API Call"
-    },
     "label": "API Call",
+    "dependencies": {
+      "node-fetch": "3.3.2"
+    },
     "values": {
-      "method": {
-        "type": "javascript",
-        "expression": "ctx[\"root\"][\"request\"].method"
+      "queryParams": {},
+      "authorization": {
+        "expression": "ctx[\"root\"][\"request\"][\"headers\"].authorization"
       },
+      "url": {
+        "keys": [
+          "2cae3437-048b-4172-b4f2-0262f89bfc95"
+        ]
+      },
+      "shouldAwait": true,
       "body": {
         "keys": [
           "request",
           "body"
         ]
       },
-      "shouldAwait": true,
-      "queryParams": {},
-      "authorization": {
-        "expression": "ctx[\"root\"][\"request\"][\"headers\"].authorization"
-      },
       "contentType": {
         "expression": "ctx[\"root\"][\"request\"][\"headers\"]['content-type']",
         "type": "javascript"
       },
-      "url": {
-        "keys": [
-          "3cc18f4f-c3f0-4360-bd11-279bb92fbf17"
-        ]
+      "method": {
+        "expression": "ctx[\"root\"][\"request\"].method",
+        "type": "javascript"
       }
     }
   }
